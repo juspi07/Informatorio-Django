@@ -70,6 +70,7 @@ def categorias(request, Nombre):
 def noticia(request, Nombre, ID):
 	noticia = Blog.objects.all().filter(ID = ID).get()
 	Com = Comentario.objects.filter(Blog = ID)
+	#Avatars = avatars.objects.all()
 	NumComent = (Comentario.objects.values('Blog',).annotate(total=Count('Mensaje'),).order_by('-total'))
 
 	context = {

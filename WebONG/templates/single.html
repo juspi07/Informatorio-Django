@@ -191,7 +191,7 @@
                         <div class="bg-white border border-top-0 p-4">
                             {% for item in context.Com %}
 								<div class="media mb-4">
-									<img src="{% avatar_url user 1000 %}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+									<img src="{% avatar_url item.Usuario 1000 %}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
 									<div class="media-body">
 										<h6><a class="text-secondary font-weight-bold">{{item.Usuario}}</a> <small><i>{{item.Fecha_alta}}</i></small></h6>
 										<p>{{item.Mensaje}}</p>
