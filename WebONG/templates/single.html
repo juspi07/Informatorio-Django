@@ -1,0 +1,469 @@
+{% load static %}
+{% load cropping %}
+{% load avatar_tags %}
+<!DOCTYPE html>
+<html lang="en"> 
+
+<head>
+    <meta charset="utf-8">
+    <title>Entre Nosotras - Informatorio</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">  
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+</head> 
+
+<body>
+    {% include 'message.html' %}
+	<!-- Topbar Start -->
+    <div class="container-fluid d-none d-lg-block">
+        <div class="row align-items-center bg-dark px-lg-5">
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-sm bg-dark p-0">
+                    <ul class="navbar-nav ml-n2">
+                        <li class="nav-item border-right border-secondary">
+							<a class="nav-link text-body small">{{context.date}}</a>
+						</li>
+						{% if user.is_authenticated %}
+							<li class="nav-item border-right border-secondary">		
+								<a class="nav-link text-body small" href="{% url 'user' %}">BIENVENIDO, {{user.username}}</a>
+							</li>
+						{% else %}
+							<li class="nav-item border-right border-secondary">		
+								<a class="nav-link text-body small" href="{% url 'login' %}">INGRESAR</a>
+							</li>
+						{% endif %}
+					</ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 text-right d-none d-md-block">
+                <nav class="navbar navbar-expand-sm bg-dark p-0">
+                    <ul class="navbar-nav ml-auto mr-n2">
+						{% if user.is_authenticated %}
+							<li class="nav-item">
+								<a class="nav-link text-body" href="{% url 'logout' %}">Cerrar sesion</a>
+							</li>
+						{% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link text-body" href="https://www.facebook.com/FundacionEntreNosotras"><small class="fab fa-facebook-f"></small></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-body" href="https://www.instagram.com/p/CiKoUHruPKx/"><small class="fab fa-instagram"></small></a>
+                        </li>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="row align-items-center bg-white py-3 px-lg-5">
+            <div class="col-lg-4">
+                <a href="index.html" class="navbar-brand p-0 d-none d-lg-block">
+                    <a href="{% url 'home' %}"><img class="img-fluid" src="{% static 'img/logo.jpg' %}" alt=""></a>
+                </a>
+            </div>
+            <div class="col-lg-8 text-center text-lg-right">
+				<a href="#"><img class="img-fluid" src="{% static 'img/donaciones.png' %}" alt=""></a>
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
+            <a href="{% url 'home' %}" class="navbar-brand d-block d-lg-none">
+                <h1 class="m-0 display-4 text-uppercase text-primary">Entre<span class="text-white font-weight-normal">Nosotras</span></h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav mr-auto py-0">
+                    <a href="{% url 'home' %}" class="nav-item nav-link active">Inicio</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorias</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            {% for item in context.tags %}
+								<a href="{% url 'categoria' item.Nombre %}" class="dropdown-item">{{item.Nombre}}</a>
+							{% endfor %}
+						</div>
+                    </div>
+					<a href="{% url 'contacto' %}" class="nav-item nav-link">Contacto</a>
+                </div>
+            <!--    <div class="input-group ml-auto d-none d-lg-flex" style="width: 100%; max-width: 300px;">
+                    <input type="text" class="form-control border-0" placeholder="Keyword">
+                    <div class="input-group-append">
+                        <button class="input-group-text bg-primary text-dark border-0 px-3"><i
+                                class="fa fa-search"></i></button>
+                    </div>
+                </div> -->
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Breaking News Start -->
+    <div class="container-fluid mt-5 mb-3 pt-3">
+     <!--   <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between">
+                        <div class="section-title border-right-0 mb-0" style="width: 180px;">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Tranding</h4>
+                        </div>
+                        <div class="owl-carousel tranding-carousel position-relative d-inline-flex align-items-center bg-white border border-left-0"
+                            style="width: calc(100% - 180px); padding-right: 100px;">
+                            <div class="text-truncate"><a class="text-secondary text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit. Proin interdum lacus eget ante tincidunt, sed faucibus nisl sodales</a></div>
+                            <div class="text-truncate"><a class="text-secondary text-uppercase font-weight-semi-bold" href="">Lorem ipsum dolor sit amet elit. Proin interdum lacus eget ante tincidunt, sed faucibus nisl sodales</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <!-- Breaking News End -->
+
+
+    <!-- News With Sidebar Start -->
+    <div class="container-fluid">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <!-- News Detail Start -->
+                    <div class="position-relative mb-3">
+                        <img class="img-fluid w-100" src="{% cropped_thumbnail context.noticia "Recorte1" %}" style="object-fit: cover;">
+                        <div class="bg-white border border-top-0 p-4">
+                            <div class="mb-3">
+                                <a class="badge badge-primary text-uppercase font-weight-semi-bold p-2 mr-2"
+                                    href="">{{Nombre}}</a>
+                                <a class="text-body">{{context.noticia.Fecha_alta}}</a>
+                            </div>
+                            <h1 class="mb-3 text-secondary text-uppercase font-weight-bold">{{context.noticia.Titulo}}</h1>
+                            <p>{{context.noticia.Desc1}}</p>
+                            
+                            <h5 class="text-uppercase font-weight-bold mb-3">{{context.noticia.SubT2}}</h5>
+                            <img class="img-fluid w-50 float-left mr-4 mb-2" src="{% cropped_thumbnail context.noticia "Recorte2" %}">
+                            <p>{{context.noticia.Desc2}}</p>
+                            <h5 class="text-uppercase font-weight-bold mb-3">{{context.noticia.SubT3}}</h5>
+                            {% if context.noticia.Img3 %}
+								<img class="img-fluid w-50 float-right mr-4 mb-2" src="{% cropped_thumbnail context.noticia "Recorte3" %}">
+							{% endif %}
+							<p>{{context.noticia.Desc3|ljust:50}}</p>
+							<p>&nbsp</p>
+							<p>&nbsp</p>
+						</div>
+                        
+						<div class="d-flex justify-content-between bg-white border border-top-0 p-4">
+							<div class="d-flex align-items-center">
+								{% for item2 in context.NumComent %}
+									{% if item2.Blog == context.noticia.ID %}
+										<span class="ml-3"><i class="far fa-comment mr-2"></i>{{item2.total}}</span>
+									{% endif %}
+									{% if item2.Blog == context.noticia.ID and item2.total == 0 %}
+										<span class="ml-3"><i class="far fa-comment mr-2"></i>0</span>
+									{% endif %}
+								{% endfor %}
+							</div>
+                        </div>
+					</div>
+                    <!-- News Detail End -->
+
+                    <!-- Comment List Start -->
+					<div class="mb-3">
+                        <div class="section-title mb-0">
+							<h4 class="m-0 text-uppercase font-weight-bold">{{context.NumCom}} Comentarios</h4>
+						</div>
+                        <div class="bg-white border border-top-0 p-4">
+                            {% for item in context.Com %}
+								<div class="media mb-4">
+									<img src="{% avatar_url user 1000 %}" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+									<div class="media-body">
+										<h6><a class="text-secondary font-weight-bold">{{item.Usuario}}</a> <small><i>{{item.Fecha_alta}}</i></small></h6>
+										<p>{{item.Mensaje}}</p>
+										<!-- <button class="btn btn-sm btn-outline-secondary">Reply</button> AQUI VA EL BOTON DE REPLY QUE NO SE IMPLEMENTA --> 
+									</div>
+								</div>
+                            {% endfor %}
+							<!-- <div class="media">
+                                <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                <div class="media-body">
+                                    <h6><a class="text-secondary font-weight-bold" href="">John Doe</a> <small><i>01 Jan 2045</i></small></h6>
+                                    <p>Diam amet duo labore stet elitr invidunt ea clita ipsum voluptua, tempor labore
+                                        accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                    <button class="btn btn-sm btn-outline-secondary">Reply</button>
+                                    <div class="media mt-4">
+                                        <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1"
+                                            style="width: 45px;">
+                                        <div class="media-body">
+                                            <h6><a class="text-secondary font-weight-bold" href="">John Doe</a> <small><i>01 Jan 2045</i></small></h6>
+                                            <p>Diam amet duo labore stet elitr invidunt ea clita ipsum voluptua, tempor
+                                                labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed
+                                                eirmod ipsum.</p>
+                                            <button class="btn btn-sm btn-outline-secondary">Reply</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>                                   SE PODRIA IMPLEMENTAR SISTEMA DE REPLY DEJO LA ESTRUCTURA PARA UN FUTURO-->				
+                        
+						</div>
+                    </div>
+                    <!-- Comment List End -->
+
+                    <!-- Comment Form Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Dejanos tu comentario</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-4">
+                            {% if user.is_authenticated %}
+								<form action="" method="POST"> {% csrf_token %}
+									<div class="form-group">
+										<label for="message">Mensaje *</label>
+										<textarea id="mensaje" cols="30" rows="5" class="form-control" name="mensaje"></textarea>
+									</div>
+									<div class="form-group mb-0">
+										<input type="submit" value="Deja tu comentario"
+											class="btn btn-primary font-weight-semi-bold py-2 px-3">
+									</div>
+								</form>
+							{% else %}
+								<label>Debes estar registrado para poder dejar comentarios</label>
+							{% endif %}
+						</div>
+                    </div>
+                    <!-- Comment Form End -->
+                </div>
+
+                <div class="col-lg-4">
+                    <!-- Social Follow Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Seguinos</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <a href="https://www.facebook.com/FundacionEntreNosotras" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #39569E;">
+                                <i class="fab fa-facebook-f text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">¡Dame click!</span>
+                            </a>
+                            <a href="https://www.instagram.com/p/CiKoUHruPKx/" class="d-block w-100 text-white text-decoration-none mb-3" style="background: #C8359D;">
+                                <i class="fab fa-instagram text-center py-4 mr-3" style="width: 65px; background: rgba(0, 0, 0, .2);"></i>
+                                <span class="font-weight-medium">¡Dame click!</span>
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Social Follow End -->
+
+                    <!-- Ads Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Publicidad</h4>
+                        </div>
+                        <div class="bg-white text-center border border-top-0 p-3">
+                            <a><img class="img-fluid" src="{% static 'img/sponsor.jpg' %}" alt=""></a>
+                        </div>
+                    </div>
+                    <!-- Ads End -->
+
+                    <!-- Popular News Start 
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Tranding News</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                <img class="img-fluid" src="img/news-110x110-1.jpg" alt="">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                    </div>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                <img class="img-fluid" src="img/news-110x110-2.jpg" alt="">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                    </div>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                <img class="img-fluid" src="img/news-110x110-3.jpg" alt="">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                    </div>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                <img class="img-fluid" src="img/news-110x110-4.jpg" alt="">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                    </div>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                                </div>
+                            </div>
+                            <div class="d-flex align-items-center bg-white mb-3" style="height: 110px;">
+                                <img class="img-fluid" src="img/news-110x110-5.jpg" alt="">
+                                <div class="w-100 h-100 px-3 d-flex flex-column justify-content-center border border-left-0">
+                                    <div class="mb-2">
+                                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                                    </div>
+                                    <a class="h6 m-0 text-secondary text-uppercase font-weight-bold" href="">Lorem ipsum dolor sit amet elit...</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    Popular News End -->
+
+                    <!-- Newsletter Start
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Newsletter</h4>
+                        </div>
+                        <div class="bg-white text-center border border-top-0 p-3">
+                            <p>Aliqu justo et labore at eirmod justo sea erat diam dolor diam vero kasd</p>
+                            <div class="input-group mb-2" style="width: 100%;">
+                                <input type="text" class="form-control form-control-lg" placeholder="Your Email">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary font-weight-bold px-3">Sign Up</button>
+                                </div>
+                            </div>
+                            <small>Lorem ipsum dolor sit amet elit</small>
+                        </div>
+                    </div>
+                    <!-- Newsletter End -->
+
+                    <!-- Tags Start -->
+                    <div class="mb-3">
+                        <div class="section-title mb-0">
+                            <h4 class="m-0 text-uppercase font-weight-bold">Tags</h4>
+                        </div>
+                        <div class="bg-white border border-top-0 p-3">
+                            <div class="d-flex flex-wrap m-n1">
+								{% for item in context.tags %} 
+									<a href="{% url 'categoria' item.Nombre %}" class="btn btn-sm btn-outline-secondary m-1">{{item.Nombre}}</a>
+								{% endfor %}
+							</div>
+                        </div>
+                    </div>
+                    <!-- Tags End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- News With Sidebar End -->
+
+
+         <!-- Footer Start -->
+    <div class="container-fluid bg-dark pt-5 px-sm-3 px-md-5 mt-5">
+        <div class="row py-4">
+            <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="mb-4 text-white text-uppercase font-weight-bold">Agendalo</h5>
+                <p class="font-weight-medium"><i class="fa fa-map-marker-alt mr-2"></i>Villa Angela, Argentina, 3540</p>
+                <p class="font-weight-medium"><i class="fa fa-phone-alt mr-2"></i>+54 3735 46-4287</p>
+                <p class="font-weight-medium"><i class="fa fa-envelope mr-2"></i>entrenosotras.org@gmail.com</p>
+                <h6 class="mt-4 mb-3 text-white text-uppercase font-weight-bold">¡Seguinos!</h6>
+                <div class="d-flex justify-content-start">
+                    <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="https://www.facebook.com/FundacionEntreNosotras"><i class="fab fa-facebook-f"></i></a>
+                    <a class="btn btn-lg btn-secondary btn-lg-square mr-2" href="https://www.instagram.com/fundacion.entrenosotras/"><i class="fab fa-instagram"></i></a>
+                <!--    <a class="btn btn-lg btn-secondary btn-lg-square" href="#"><i class="fab fa-youtube"></i></a> -->
+                </div>
+            </div>
+        <!--    <div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="mb-4 text-white text-uppercase font-weight-bold">Noticias mas populares</h5>
+                <div class="mb-3">
+                    <div class="mb-2">
+                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                    </div>
+                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
+                </div>
+                <div class="mb-3">
+                    <div class="mb-2">
+                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                    </div>
+                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
+                </div>
+                <div class="">
+                    <div class="mb-2">
+                        <a class="badge badge-primary text-uppercase font-weight-semi-bold p-1 mr-2" href="">Business</a>
+                        <a class="text-body" href=""><small>Jan 01, 2045</small></a>
+                    </div>
+                    <a class="small text-body text-uppercase font-weight-medium" href="">Lorem ipsum dolor sit amet elit. Proin vitae porta diam...</a>
+                </div>
+            </div> -->
+            <!--
+			<div class="col-lg-3 col-md-6 mb-5">
+                <h5 class="mb-4 text-white text-uppercase font-weight-bold">Flickr Photos</h5>
+                <div class="row">
+                    <div class="col-4 mb-3">
+                        <a href=""><img class="w-100" src="{% static 'img/news-110x110-1.jpg' %}" alt=""></a>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <a href=""><img class="w-100" src="{% static 'img/news-110x110-2.jpg' %}" alt=""></a>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <a href=""><img class="w-100" src="{% static 'img/news-110x110-3.jpg' %}" alt=""></a>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <a href=""><img class="w-100" src="{% static 'img/news-110x110-4.jpg' %}" alt=""></a>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <a href=""><img class="w-100" src="img/news-110x110-5.jpg" alt=""></a>
+                    </div>
+                    <div class="col-4 mb-3">
+                        <a href=""><img class="w-100" src="img/news-110x110-1.jpg" alt=""></a>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+    <div class="container-fluid py-4 px-sm-3 px-md-5" style="background: #111111;">
+        <p class="m-0 text-center">&copy; <a href="https://www.facebook.com/FundacionEntreNosotras">Entre Nosotras</a>. Todos los derechos reservados.
+		
+		<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+		Design by <a href="https://htmlcodex.com">HTML Codex</a></p>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary btn-square back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+
+    <!-- Template Javascript -->
+    <script src="{% static 'js/main.js' %}"></script>
+</body>
+
+</html>

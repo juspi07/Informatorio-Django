@@ -1,0 +1,202 @@
+{% load static %}
+{% load avatar_tags %}
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Entre Nosotras - Informatorio</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <!-- Favicon -->
+    <link href="{% static 'img/favicon.ico' %}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">  
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+	<link href="{% static 'css/style-user.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    {% include 'message.html' %}
+	<!-- Topbar Start -->
+    <div class="container-fluid d-none d-lg-block">
+        <div class="row align-items-center bg-dark px-lg-5">
+            <div class="col-lg-9">
+                <nav class="navbar navbar-expand-sm bg-dark p-0">
+                    <ul class="navbar-nav ml-n2">
+                        <li class="nav-item border-right border-secondary">
+							<a class="nav-link text-body small">{{context.date}}</a>
+						</li>
+						{% if user.is_authenticated %}
+							<li class="nav-item border-right border-secondary">		
+								<a class="nav-link text-body small" href="{% url 'user' %}">BIENVENIDO, {{user.username}}</a>
+							</li>
+						{% else %}
+							<li class="nav-item border-right border-secondary">		
+								<a class="nav-link text-body small" href="{% url 'login' %}">INGRESAR</a>
+							</li>
+						{% endif %}
+					</ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 text-right d-none d-md-block">
+                <nav class="navbar navbar-expand-sm bg-dark p-0">
+                    <ul class="navbar-nav ml-auto mr-n2">
+						{% if user.is_authenticated %}
+							<li class="nav-item">
+								<a class="nav-link text-body" href="{% url 'logout' %}">Cerrar sesion</a>
+							</li>
+						{% endif %}
+                        <li class="nav-item">
+                            <a class="nav-link text-body" href="https://www.facebook.com/FundacionEntreNosotras"><small class="fab fa-facebook-f"></small></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-body" href="https://www.instagram.com/p/CiKoUHruPKx/"><small class="fab fa-instagram"></small></a>
+                        </li>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+        <div class="row align-items-center bg-white py-3 px-lg-5">
+            <div class="col-lg-4">
+                <a href="index.html" class="navbar-brand p-0 d-none d-lg-block">
+                    <a href=""><img class="img-fluid" src="{% static 'img/logo.jpg' %}" alt=""></a>
+                </a>
+            </div>
+            <div class="col-lg-8 text-center text-lg-right">
+            <!--    <a href="https://htmlcodex.com"><img class="img-fluid" src="img/ads-728x90.png" alt=""></a> -->
+            </div>
+        </div>
+    </div>
+    <!-- Topbar End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid p-0">
+        <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-2 py-lg-0 px-lg-5">
+            <a href="{% url 'home' %}" class="navbar-brand d-block d-lg-none">
+                <h1 class="m-0 display-4 text-uppercase text-primary">Entre<span class="text-white font-weight-normal">Nosotras</span></h1>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between px-0 px-lg-3" id="navbarCollapse">
+                <div class="navbar-nav mr-auto py-0">
+                    <a href="{% url 'home' %}" class="nav-item nav-link active">Inicio</a>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Categorias</a>
+                        <div class="dropdown-menu rounded-0 m-0">
+                            {% for item in context.tags %}
+								<a href="{% url 'categoria' item.Nombre %}" class="dropdown-item">{{item.Nombre}}</a>
+							{% endfor %}
+						</div>
+                    </div>
+                    <a href="{% url 'contacto' %}" class="nav-item nav-link">Contacto</a>
+                </div>
+                <!-- <div class="input-group ml-auto d-none d-lg-flex" style="width: 100%; max-width: 300px;">
+                    <input type="text" class="form-control border-0" placeholder="Keyword">
+                    <div class="input-group-append">
+                        <button class="input-group-text bg-primary text-dark border-0 px-3"><i
+                                class="fa fa-search"></i></button>
+                    </div>
+                </div> -->
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+	<div class="container-xl px-4 mt-4">
+		<div class="row">
+			<div class="col-xl-4">
+				<!-- Profile picture card-->
+				<div class="card mb-4 mb-xl-0">
+					<div class="card-header">Profile Picture</div>
+					<div class="card-body text-center">
+						<!-- Profile picture image-->
+						<img class="img-account-profile rounded-circle mb-2" src="{% avatar_url user 1000 %}" alt="">
+						<!-- Profile picture help block-->
+						<div class="small font-italic text-muted mb-4"></div>
+						<!-- Profile picture upload button-->
+						<a class="btn btn-primary" href="{% url 'avatar_change' %}">Subir imagen</a>
+						<!--<button class="btn btn-primary" type="submit">Subir imagen</button>-->
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-8">
+				<!-- Account details card-->
+				<div class="card mb-4">
+					<div class="card-header">Account Details</div>
+					<div class="card-body">
+						<form method="POST"> {% csrf_token %} 
+							<!-- Form Group (username)-->
+							<div class="mb-3">
+								<label class="small mb-1" for="inputUsername">Username (Nombre que veran los otros usuarios)</label>
+								<input class="form-control" id="inputUsername" type="text" placeholder="Ingresa tu nuevo usuario" value="{{user.username}}">
+							</div>
+							<!-- Form Row-->
+							<div class="row gx-3 mb-3">
+								<!-- Form Group (first name)-->
+								<div class="col-md-6">
+									<label class="small mb-1" for="inputFirstName">Nombre</label>
+									<input class="form-control" name="inputFirstName" type="text" placeholder="Ingresa tu nombre" value="{{user.first_name}}">
+								</div>
+								<!-- Form Group (last name)-->
+								<div class="col-md-6">
+									<label class="small mb-1" for="inputLastName">Apellido</label>
+									<input class="form-control" name="inputLastName" type="text" placeholder="Ingresa tu apellido" value="{{user.last_name}}">
+								</div>
+							</div>
+							<!-- Form Row        -->
+							<div class="row gx-3 mb-3">
+								<!-- Form Group (password)-->
+								<div class="col-md-6">
+									<label class="small mb-1" for="inputOrgName">Contraseña</label>
+									<input class="form-control" name="inputOrgName" type="password" placeholder="opcional" value="">
+								</div>
+								<!-- Form Group (location)-->
+								<div class="col-md-6">
+									<label class="small mb-1" for="inputLocation">Direccion</label>
+									<input class="form-control" name="inputLocation" type="text" placeholder="Ingresa tu direccion" value="{{context.userextra.direccion}}">
+								</div>
+							</div>
+							<!-- Form Group (email address)-->
+							<div class="mb-3">
+								<label class="small mb-1" for="inputEmailAddress">Email</label>
+								<input class="form-control" name="inputEmailAddress" type="email" placeholder="Ingresa tu Email" value="{{user.email}}">
+							</div>
+							<!-- Form Row-->
+							<div class="row gx-3 mb-3">
+								<!-- Form Group (phone number)-->
+								<div class="col-md-6">
+									<label class="small mb-1" for="inputPhone">Telefono</label>
+									<input class="form-control" name="inputPhone" type="tel" placeholder="Ingresa tu telefono" value="{{context.userextra.tel}}">
+								</div>
+								<!-- Form Group (birthday)-->
+								<div class="col-md-6">
+									<label class="small mb-1" for="inputBirthday">Fecha de nacimiento</label>
+									<input class="form-control" name="inputBirthday" type="text" name="birthday" placeholder="Ingresa tu fecha" value="{{context.userextra.cumple}}">
+								</div>
+							</div>
+							<!-- Save changes button-->
+							<button class="btn btn-primary" type="submit">Guardar cambios</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
