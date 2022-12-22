@@ -1,5 +1,10 @@
 Grupo 2
 
+Integrantes:
+ - Gonzalez Magaldi, Juan Pablo
+ - Ledezma, Cristian 
+ - Fleita, Hugo Edgardo 
+
 
 Librerias externas utilizadas: (todas se bajan mediane pip)
 
